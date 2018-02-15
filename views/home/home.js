@@ -9,7 +9,6 @@ angular.module('myApp.home', ['ngRoute'])
   });
 }])
 
-.controller('HomeCtrl', [function() {
-
-
+.controller('HomeCtrl', ['$scope', 'ExampleService', function($scope, ExampleService) {
+  $scope.greeting = ExampleService.greeting();
 }]);
