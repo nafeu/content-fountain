@@ -1,0 +1,25 @@
+{
+  "name": "angular-graphql-prototype",
+  "version": "0.1.0",
+  "description": "Angular 1 SPA starter with graphQL for prototyping",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nafeu/quick-angular1-spa-starter.git"
+  },
+  "author": "Nafeu Nasir <nafeu.nasir@gmail.com> (http://nafeu.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nafeu/quick-angular1-spa-starter/issues"
+  },
+  "homepage": "https://github.com/nafeu/quick-angular1-spa-starter#readme",
+  "dependencies": {
+    "body-parser": "1.18.2",
+    "express": "4.16.2",
+    "express-graphql": "0.6.11",
+    "graphql": "0.13.1"
+  }
+}
