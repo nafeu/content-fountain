@@ -5,7 +5,8 @@ const { buildSchema } = require('graphql')
 // ---------------------------------------------------------------------------
 const schema = buildSchema(`
   type Query {
-    hello: String
+    greeting: String
+    rollDice(numDice: Int!, numSides: Int): [Int]
   }
 `)
 
@@ -13,10 +14,17 @@ const schema = buildSchema(`
 // Resolvers
 // ---------------------------------------------------------------------------
 const rootValue = {
-  hello: () => {
-    return 'Hello world!'
+  greeting: function() {
+    return "Hello World!"
   },
-}
+  rollDice: function ({numDice, numSides}) {
+    const output = []
+    for (var i = 0; i < numDice; i++) {
+      output.push(1 + Math.floor(Math.random() * (numSides || 6)))
+    }
+    return output
+  }
+};
 
 module.exports = {
   schema,

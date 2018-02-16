@@ -9,6 +9,12 @@ angular.module('myApp.home', ['ngRoute'])
   });
 }])
 
-.controller('HomeCtrl', ['$scope', 'ExampleService', function($scope, ExampleService) {
-  $scope.greeting = ExampleService.greeting();
+.controller('HomeCtrl', ['$scope', 'apiService', function($scope, apiService) {
+  apiService.greeting().success(function(res){
+    $scope.greeting = res.data.greeting;
+  });
+
+  apiService.rollDice(4, 6).success(function(res){
+    $scope.rollDice = res.data.rollDice;
+  });
 }]);
