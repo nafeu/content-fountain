@@ -1,2 +1,7 @@
 <h2>Home</h2>
+<h4>Greeting:</h4>
 <p>{{ greeting }}</p>
+<h4>Dice:</h4>
+<ul>
+  <li ng-repeat="dice in rollDice track by $index">{{ dice }}</li>
+</ul>
