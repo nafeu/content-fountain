@@ -9,7 +9,7 @@ angular.module('myApp.home', ['ngRoute'])
   });
 }])
 
-.controller('HomeCtrl', ['$scope', 'apiService', function($scope, apiService) {
+.controller('HomeCtrl', ['$scope', 'apiService', 'storageService', function($scope, apiService, storageService) {
   apiService.greeting().success(function(res){
     $scope.greeting = res.data.greeting;
   });
@@ -17,4 +17,16 @@ angular.module('myApp.home', ['ngRoute'])
   apiService.rollDice(4, 6).success(function(res){
     $scope.rollDice = res.data.rollDice;
   });
+
+  $scope.storageTest = storageService.get('storageTest');
+
+  $scope.save = function(key, data) {
+    storageService.set(key, data);
+    alert(storageService.read());
+  }
+
+  $scope.testExport = function() {
+    alert(storageService.export())
+  }
+
 }]);

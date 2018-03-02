@@ -5,3 +5,5 @@
 <ul>
   <li ng-repeat="dice in rollDice track by $index">{{ dice }}</li>
 </ul>
+<input ng-enter="save('storageTest', storageTest)" ng-model="storageTest" placeholder="This saves in localstorage">
+<button ng-click="testExport()">Test Data Export</button>
