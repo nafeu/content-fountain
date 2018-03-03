@@ -1,9 +1,31 @@
-<h2>Home</h2>
-<h4>Greeting:</h4>
-<p>{{ greeting }}</p>
-<h4>Dice:</h4>
-<ul>
-  <li ng-repeat="dice in rollDice track by $index">{{ dice }}</li>
-</ul>
-<input ng-enter="save('storageTest', storageTest)" ng-model="storageTest" placeholder="This saves in localstorage">
-<button ng-click="testExport()">Test Data Export</button>
+<h2>Post Text Organizer</h2>
+
+<div class="input-group mb-2">
+  <input ng-model="caption" placeholder="Enter caption" type="text" class="form-control">
+</div>
+
+<div class="input-group mb-2">
+  <input ng-model="contact" placeholder="Enter contact" type="text" class="form-control">
+</div>
+
+<div class="input-group mb-2">
+  <input ng-model="tags" placeholder="Enter tags" type="text" class="form-control">
+</div>
+
+<div class="input-group mb-2">
+  <input ng-model="break" placeholder="Enter break line character" type="text" class="form-control">
+</div>
+
+<textarea id="output" class="form-control mb-2" rows="10">
+{{caption}}
+{{break}}
+{{contact}}
+{{break}}
+{{break}}
+{{break}}
+{{tags}}
+</textarea>
+
+<div class="input-group mb-2">
+  <button type="button" class="btn btn-primary" data-clipboard-target="#output">Copy To Clipboard</button>
+</div>
