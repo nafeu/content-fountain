@@ -1,55 +1,22 @@
-<h2>Post Text Organizer</h2>
+<h2>Content Fountain</h2>
 
 <div class="row">
-
   <div class="col">
-
     <div class="input-group mb-2">
       <button ng-click="insertCaption()" type="button" class="btn btn-primary">Insert Caption</button>
     </div>
-
-    <div class="input-group mb-2">
-      <button ng-click="insertContact()" type="button" class="btn btn-primary">Insert Contact Info</button>
-    </div>
-
     <div ng-repeat="collection in tagData" class="input-group mb-2">
       <button ng-click="insertTags(collection.category)" type="button" class="btn btn-primary">Insert tags for {{collection.category}}</button>
     </div>
   </div>
-
   <div class="col">
+    <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2">{{caption}}</textarea>
+    <textarea id="tag-output-display" class="form-control mb-2" rows="3">{{tags}}</textarea>
+    <textarea id="tag-output" style="position: absolute; top: -1000px" class="form-control mb-2" rows="3">•&#10;•&#10;•&#10;•&#10;•&#10;{{tags}}</textarea>
     <div class="input-group mb-2">
-      <input ng-model="caption" placeholder="Enter caption" type="text" class="form-control">
-    </div>
-
-    <div class="input-group mb-2">
-      <input ng-model="contact" placeholder="Enter contact" type="text" class="form-control">
-    </div>
-
-    <div class="input-group mb-2">
-      <input ng-model="tags" placeholder="Enter tags" type="text" class="form-control">
-    </div>
-
-    <div class="input-group mb-2">
-      <input ng-model="break" placeholder="Enter break line character" type="text" class="form-control">
-    </div>
-
-    <textarea id="output" class="form-control mb-2" rows="10">
-{{caption}}
-{{break}}
-{{contact}}
-{{break}}
-{{break}}
-{{break}}
-{{tags}}
-    </textarea>
-
-    <div class="input-group mb-2">
-      <button type="button" class="btn btn-primary" data-clipboard-target="#output">Copy To Clipboard</button>
+      <button type="button" class="btn btn-primary mr-2" data-clipboard-target="#caption-output">Copy Caption</button>
+      <button type="button" class="btn btn-primary" data-clipboard-target="#tag-output">Copy Tags</button>
     </div>
   </div>
-
-
-
 </div>
 
