@@ -14,9 +14,7 @@ angular.module('myApp.home', ['ngRoute'])
   new ClipboardJS('.btn');
 
   $scope.caption = "";
-  $scope.contact = "";
   $scope.tags = "";
-  $scope.break = ".";
 
   $scope.tagData = [
     {
