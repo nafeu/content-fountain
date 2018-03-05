@@ -1,22 +1,40 @@
 <h2>Post Text Organizer</h2>
 
-<div class="input-group mb-2">
-  <input ng-model="caption" placeholder="Enter caption" type="text" class="form-control">
-</div>
+<div class="row">
 
-<div class="input-group mb-2">
-  <input ng-model="contact" placeholder="Enter contact" type="text" class="form-control">
-</div>
+  <div class="col">
 
-<div class="input-group mb-2">
-  <input ng-model="tags" placeholder="Enter tags" type="text" class="form-control">
-</div>
+    <div class="input-group mb-2">
+      <button ng-click="insertCaption()" type="button" class="btn btn-primary">Insert Caption</button>
+    </div>
 
-<div class="input-group mb-2">
-  <input ng-model="break" placeholder="Enter break line character" type="text" class="form-control">
-</div>
+    <div class="input-group mb-2">
+      <button ng-click="insertContact()" type="button" class="btn btn-primary">Insert Contact Info</button>
+    </div>
 
-<textarea id="output" class="form-control mb-2" rows="10">
+    <div ng-repeat="collection in tagData" class="input-group mb-2">
+      <button ng-click="insertTags(collection.category)" type="button" class="btn btn-primary">Insert tags for {{collection.category}}</button>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="input-group mb-2">
+      <input ng-model="caption" placeholder="Enter caption" type="text" class="form-control">
+    </div>
+
+    <div class="input-group mb-2">
+      <input ng-model="contact" placeholder="Enter contact" type="text" class="form-control">
+    </div>
+
+    <div class="input-group mb-2">
+      <input ng-model="tags" placeholder="Enter tags" type="text" class="form-control">
+    </div>
+
+    <div class="input-group mb-2">
+      <input ng-model="break" placeholder="Enter break line character" type="text" class="form-control">
+    </div>
+
+    <textarea id="output" class="form-control mb-2" rows="10">
 {{caption}}
 {{break}}
 {{contact}}
@@ -24,8 +42,14 @@
 {{break}}
 {{break}}
 {{tags}}
-</textarea>
+    </textarea>
 
-<div class="input-group mb-2">
-  <button type="button" class="btn btn-primary" data-clipboard-target="#output">Copy To Clipboard</button>
+    <div class="input-group mb-2">
+      <button type="button" class="btn btn-primary" data-clipboard-target="#output">Copy To Clipboard</button>
+    </div>
+  </div>
+
+
+
 </div>
+
