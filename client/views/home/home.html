@@ -1,14 +1,40 @@
-<h2>Content Fountain</h2>
+<h2>IG Content Fountain</h2>
 
 <div class="row">
+
   <div class="col">
     <div class="input-group mb-2">
-      <button ng-click="insertCaption()" type="button" class="btn btn-primary">Insert Caption</button>
+      <button ng-click="showConnections = !showConnections" type="button" class="btn btn-warning">Connections</button>
     </div>
-    <div ng-repeat="collection in tagData" class="input-group mb-2">
-      <button ng-click="insertTags(collection.category)" type="button" class="btn btn-primary">Insert tags for {{collection.category}}</button>
+
+    <div ng-show="showConnections" class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Google API</span>
+      </div>
+      <input ng-change="save('googleToken', tokens.google)" placeholder="Enter Token" ng-model="tokens.google" type="text" class="form-control mr-2">
+    </div>
+    <div ng-show="showConnections" class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello API</span>
+      </div>
+      <input ng-change="save('trelloToken', tokens.trello)" placeholder="Enter Token" ng-model="tokens.trello" type="text" class="form-control mr-2">
+    </div>
+    <div ng-show="showConnections" class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Google Sheet</span>
+      </div>
+      <input ng-change="save('sheetId', sheetId)" placeholder="Enter Sheet ID" ng-model="sheetId" type="text" class="form-control">
+    </div>
+
+    <hr>
+    <div class="input-group mb-2">
+      <button ng-click="loadTagData()" type="button" class="btn btn-primary">Load Tag Data</button>
+    </div>
+    <div class="input-group mb-2">
+      <button ng-repeat="collection in tagData" ng-click="insertTags(collection.category)" type="button" class="btn btn-success mr-2">{{collection.category}}</button>
     </div>
   </div>
+
   <div class="col">
     <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2">{{caption}}</textarea>
     <textarea id="tag-output-display" class="form-control mb-2" rows="3">{{tags}}</textarea>
