@@ -98,6 +98,12 @@ body {
   padding-top: 50px;
 }
 
+#site-footer {
+  margin-top: 20px;
+  font-size: 0.75em;
+  text-align: center;
+}
+
 
 /* ==========================================================================
    Helper classes
