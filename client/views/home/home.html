@@ -1,79 +1,67 @@
-<div class="jumbotron mt-4">
-  <div class="container">
-    <h1 class="display-4">IG Content Fountain</h1>
-    <p class="lead">Generate, batch and save ideas for branded content.</p>
-  </div>
-</div>
+<h1 class="display-4">IG Content Fountain</h1>
 
 <div class="row">
 
-  <div class="col">
-
-    <div class="card mb-2">
-      <div class="card-body">
-        <h5 class="card-title">Choose Your Topics</h5>
-        <div class="input-group mb-2">
-          <button ng-click="loadTagData()" type="button" class="btn btn-sm btn-light">Load Tag Data</button>
-        </div>
-        <div class="input-group mb-2">
-          <button
-            ng-repeat="collection in tagData"
-            ng-click="toggleTopic(collection.category)"
-            ng-class="{
-              'btn-success': selectedTopics.indexOf(collection.category) > -1,
-              'btn-primary': selectedTopics.indexOf(collection.category) < 0
-            }"
-            class="btn mr-2 mb-2">
-            {{collection.category}}
-          </button>
-        </div>
-      </div>
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    <h5 class="card-title">Choose Your Topics</h5>
+    <div class="input-group mb-2">
+      <button ng-click="loadTagData()" type="button" class="btn btn-sm btn-outline-secondary">Load Tag Data</button>
     </div>
-
-    <div class="card">
-
-      <div class="card-body">
-        <h5 class="card-title">Connections</h5>
-        <div class="input-group mb-2">
-          <button ng-click="showConnections = !showConnections" type="button" class="btn btn-sm btn-light">Edit Connections</button>
-        </div>
-        <div ng-show="showConnections" class="input-group mb-2">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Google API</span>
-          </div>
-          <input ng-change="save('googleToken', tokens.google)" placeholder="Enter Token" ng-model="tokens.google" type="text" class="form-control mr-2">
-        </div>
-        <div ng-show="showConnections" class="input-group mb-2">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Trello API</span>
-          </div>
-          <input ng-change="save('trelloToken', tokens.trello)" placeholder="Enter Token" ng-model="tokens.trello" type="text" class="form-control mr-2">
-        </div>
-        <div ng-show="showConnections" class="input-group mb-2">
-          <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">Google Sheet</span>
-          </div>
-          <input ng-change="save('sheetId', sheetId)" placeholder="Enter Sheet ID" ng-model="sheetId" type="text" class="form-control">
-        </div>
-      </div>
+    <div class="input-group mb-2">
+      <button
+        ng-repeat="collection in tagData"
+        ng-click="toggleTopic(collection.category)"
+        ng-class="{
+          'btn-success': selectedTopics.indexOf(collection.category) > -1,
+          'btn-outline-primary': selectedTopics.indexOf(collection.category) < 0
+        }"
+        class="btn mr-2 mb-2">
+        {{collection.category}}
+      </button>
     </div>
-
   </div>
 
-  <div class="col">
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    <h5 class="card-title">Fresh Content</h5>
+    <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2">{{caption}}</textarea>
+    <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
+    <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
+    <button type="button" class="btn btn-outline-secondary mr-2" data-clipboard-target="#caption-output">Copy Caption</button>
+    <button type="button" class="btn btn-outline-secondary" data-clipboard-target="#tag-output">Copy Tags</button>
+  </div>
 
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Fresh Content</h5>
-        <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2">{{caption}}</textarea>
-        <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
-        <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
-        <button type="button" class="btn btn-info mr-2" data-clipboard-target="#caption-output">Copy Caption</button>
-        <button type="button" class="btn btn-info" data-clipboard-target="#tag-output">Copy Tags</button>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-12">
+    <div class="input-group mb-2">
+      <button ng-click="showConnections = !showConnections" type="button" class="btn btn-sm btn-outline-secondary">Edit Connections</button>
+    </div>
+  </div>
+  <div ng-show="showConnections" class="col-md-12">
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Google API Token</span>
+      </div>
+      <input ng-change="save('googleToken', connections.google)" placeholder="Enter Token" ng-model="connections.google" type="text" class="form-control">
+    </div>
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Google Sheet URL</span>
+      </div>
+      <input ng-change="save('sheetUrl', connections.sheetUrl)" placeholder="Enter Sheet Url" ng-model="connections.sheetUrl" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="openSheet()" class="btn btn-outline-secondary">Open Sheet</button>
       </div>
     </div>
-
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello API Token</span>
+      </div>
+      <input ng-change="save('trelloToken', connections.trello)" placeholder="Enter Token" ng-model="connections.trello" type="text" class="form-control">
+    </div>
   </div>
 </div>
+
 
 <textarea id="tag-output" style="position: absolute; top: -1000px" class="form-control mb-2" rows="3">•&#10;•&#10;•&#10;•&#10;•&#10;{{tags}}</textarea>

@@ -9,7 +9,7 @@ angular.module('myApp.home', ['ngRoute'])
   });
 }])
 
-.controller('HomeCtrl', ['$scope', 'apiService', 'storageService', function($scope, apiService, storageService) {
+.controller('HomeCtrl', ['$scope', '$window', 'apiService', 'storageService', function($scope, $window, apiService, storageService) {
 
   new ClipboardJS('.btn');
 
@@ -21,11 +21,15 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.showConnections = false;
   $scope.selectedTopics = [];
 
-  $scope.tokens = {
+  $scope.connections = {
     google: storageService.get('googleToken'),
-    trello: storageService.get('trelloToken')
+    trello: storageService.get('trelloToken'),
+    sheetUrl: storageService.get('sheetUrl')
   }
-  $scope.sheetId = storageService.get('sheetId');
+
+  $scope.openSheet = function() {
+    $window.open($scope.connections.sheetUrl, "_blank");
+  }
 
   $scope.toggleTopic = function(topic) {
     var index = $scope.selectedTopics.indexOf(topic);
@@ -42,7 +46,8 @@ angular.module('myApp.home', ['ngRoute'])
   }
 
   $scope.loadTagData = function() {
-    apiService.getTagData($scope.tokens.google, $scope.sheetId).then(function(res, err){
+    var sheetId = $scope.connections.sheetUrl.match("d\/(.*)\/edit")[1];
+    apiService.getTagData($scope.connections.google, sheetId).then(function(res, err){
       $scope.tagData = [];
       res.data.values.forEach(function(item){
         var tagList = ["MISSING-TAGS-FOR-" + item[0]];
