@@ -12,7 +12,7 @@
         ng-repeat="collection in tagData"
         ng-click="toggleTopic(collection.category)"
         ng-class="{
-          'btn-success': selectedTopics.indexOf(collection.category) > -1,
+          'btn-primary': selectedTopics.indexOf(collection.category) > -1,
           'btn-outline-primary': selectedTopics.indexOf(collection.category) < 0
         }"
         class="btn mr-2 mb-2">
@@ -23,11 +23,12 @@
 
   <div class="col-xs-12 col-sm-12 col-md-6">
     <h5 class="card-title">Fresh Content</h5>
-    <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2">{{caption}}</textarea>
+    <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
     <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
     <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
-    <button type="button" class="btn btn-outline-secondary mr-2" data-clipboard-target="#caption-output">Copy Caption</button>
-    <button type="button" class="btn btn-outline-secondary" data-clipboard-target="#tag-output">Copy Tags</button>
+    <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#caption-output">Copy Caption</button>
+    <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#tag-output">Copy Tags</button>
+    <button ng-click="createCard()" type="button" class="btn btn-outline-secondary mr-2 mb-2">Save To Trello</button>
   </div>
 
 </div>
@@ -39,26 +40,46 @@
     </div>
   </div>
   <div ng-show="showConnections" class="col-md-12">
+
     <div class="input-group mb-2">
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">Google API Token</span>
       </div>
-      <input ng-change="save('googleToken', connections.google)" placeholder="Enter Token" ng-model="connections.google" type="text" class="form-control">
+      <input ng-change="save('googleApiToken', connections.googleApiToken)" placeholder="Enter Token" ng-model="connections.googleApiToken" type="text" class="form-control">
     </div>
+
     <div class="input-group mb-2">
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">Google Sheet URL</span>
       </div>
-      <input ng-change="save('sheetUrl', connections.sheetUrl)" placeholder="Enter Sheet Url" ng-model="connections.sheetUrl" type="text" class="form-control">
+      <input ng-change="save('sheetUrl', connections.sheetUrl)" placeholder="Enter Sheet URL" ng-model="connections.sheetUrl" type="text" class="form-control">
       <div class="input-group-append">
-        <button type="button" ng-click="openSheet()" class="btn btn-outline-secondary">Open Sheet</button>
+        <button type="button" ng-click="open(connections.sheetUrl)" class="btn btn-outline-secondary">Open Sheet</button>
       </div>
     </div>
+
     <div class="input-group mb-2">
       <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">Trello API Token</span>
+        <span class="input-group-text" id="basic-addon1">Trello API Key</span>
       </div>
-      <input ng-change="save('trelloToken', connections.trello)" placeholder="Enter Token" ng-model="connections.trello" type="text" class="form-control">
+      <input ng-change="save('trelloApiKey', connections.trelloApi); updateListId();" placeholder="Enter API Key" ng-model="connections.trelloApiKey" type="text" class="form-control">
+    </div>
+
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello OAuth Token</span>
+      </div>
+      <input ng-change="save('trelloOauthToken', connections.trelloOauthToken); updateListId();" placeholder="Enter OAuth Token" ng-model="connections.trelloOauthToken" type="text" class="form-control">
+    </div>
+
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello Board</span>
+      </div>
+      <input ng-change="save('boardUrl', connections.boardUrl); updateListId();" placeholder="Enter Board URL" ng-model="connections.boardUrl" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="open(connections.boardUrl)" class="btn btn-outline-secondary">Open Board</button>
+      </div>
     </div>
   </div>
 </div>

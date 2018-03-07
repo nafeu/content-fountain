@@ -22,13 +22,16 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.selectedTopics = [];
 
   $scope.connections = {
-    google: storageService.get('googleToken'),
-    trello: storageService.get('trelloToken'),
-    sheetUrl: storageService.get('sheetUrl')
+    googleApiToken: storageService.get('googleApiToken'),
+    trelloApiKey: storageService.get('trelloApiKey'),
+    trelloOauthToken: storageService.get('trelloOauthToken'),
+    sheetUrl: storageService.get('sheetUrl'),
+    boardUrl: storageService.get('boardUrl'),
+    listId: storageService.get('listId')
   }
 
-  $scope.openSheet = function() {
-    $window.open($scope.connections.sheetUrl, "_blank");
+  $scope.open = function(url) {
+    $window.open(url, "_blank");
   }
 
   $scope.toggleTopic = function(topic) {
@@ -47,7 +50,7 @@ angular.module('myApp.home', ['ngRoute'])
 
   $scope.loadTagData = function() {
     var sheetId = $scope.connections.sheetUrl.match("d\/(.*)\/edit")[1];
-    apiService.getTagData($scope.connections.google, sheetId).then(function(res, err){
+    apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res, err){
       $scope.tagData = [];
       res.data.values.forEach(function(item){
         var tagList = ["MISSING-TAGS-FOR-" + item[0]];
@@ -78,5 +81,37 @@ angular.module('myApp.home', ['ngRoute'])
       });
     });
   }
+
+  $scope.updateListId = function() {
+    apiService.getBoardLists($scope.connections.trelloApiKey,
+                             $scope.connections.trelloOauthToken,
+                             $scope.connections.boardUrl)
+      .then(function(res, err){
+        res.data.forEach(function(list){
+          if (list.name.toLowerCase() === 'active') {
+            $scope.connections.listId = list.id;
+            storageService.set('listId', list.id);
+          }
+        })
+      })
+  }
+
+  $scope.createCard = function() {
+    var data = {
+      "name": $scope.caption,
+      "desc": "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags,
+      "pos": "top",
+    }
+    apiService.createCard($scope.connections.trelloApiKey,
+                          $scope.connections.trelloOauthToken,
+                          $scope.connections.listId,
+                          data)
+    .then(function(res){
+      alert(JSON.stringify(res));
+    }, function(err){
+      alert(JSON.stringify(err));
+    })
+  }
+
 
 }]);
