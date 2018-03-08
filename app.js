@@ -5,6 +5,9 @@ var app = angular.module('myApp', [
   'ngRoute',
   'myApp.about',
   'myApp.generate',
+  'myApp.fulfill',
+  'myApp.engage',
+  'myApp.connect',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');

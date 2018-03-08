@@ -31,13 +31,14 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.selectedRoots = [];
   $scope.listName = "instagram";
   $scope.trelloSaveStatus = "Save to Trello";
-  $scope.tagLoadStatus = "Load Tag Data";
+  $scope.tagLoadStatus = "Load Data";
   $scope.idea = "";
   $scope.showImport = false;
   $scope.connectionCode = "";
   $scope.copyConnectionsStatus = "Copy Connections To Clipboard";
   $scope.copyTagsStatus = "Copy Tags";
   $scope.copyCaptionStatus = "Copy Caption";
+  $scope.contentQueue = [];
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
@@ -98,7 +99,7 @@ angular.module('myApp.generate', ['ngRoute'])
           tags: tagList,
         })
       });
-      $scope.tagLoadStatus = "Refresh Tag Data";
+      $scope.tagLoadStatus = "Refresh Data";
     }, function(err){
       $scope.tagLoadStatus = "An error occured, try again";
       alert(JSON.stringify(err));

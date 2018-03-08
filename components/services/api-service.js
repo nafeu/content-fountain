@@ -18,6 +18,15 @@ app.service('apiService', function($http) {
     return $http.get(requestUrl);
   }
 
+  this.getCardsFromList = function(req) {
+    var trelloApi = "https://api.trello.com/1/lists/";
+    var listId = req.idList;
+    var auth = "?key=" + req.key + "&token=" + req.token;
+    var option = "/cards";
+    var requestUrl = trelloApi + listId + option + auth;
+    return $http.get(requestUrl);
+  }
+
   this.createCard = function(req) {
     var trelloApi = "https://api.trello.com/1/cards";
     return $http.post(trelloApi, req);
