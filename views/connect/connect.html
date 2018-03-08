@@ -4,3 +4,71 @@
   <a href="#!/fulfill" class="btn btn-sm btn-outline-dark mr-2">Fulfill</a>
   <a href="#!/engage" class="btn btn-sm btn-outline-dark mr-2">Engage</a>
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h5>Import/Export Connections</h5>
+    <div class="input-group mb-2">
+      <button ng-click="copyConnections()" type="button" class="btn btn-outline-dark mr-2">{{copyConnectionsStatus}}</button>
+    </div>
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Connection Code</span>
+      </div>
+      <input ng-change="save('boardUrl', connections.boardUrl); updateListId();" placeholder="Enter Connection Code" ng-model="connectionCode" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="importConnections(connectionCode)" class="btn btn-outline-dark">Load Connections</button>
+      </div>
+    </div>
+    <h5>Edit Connections</h5>
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Google API Token</span>
+      </div>
+      <input ng-change="save('googleApiToken', connections.googleApiToken)" placeholder="Enter Token" ng-model="connections.googleApiToken" type="text" class="form-control">
+      <div class="input-group-append">
+        <button ng-click="open('https://developers.google.com/maps/documentation/javascript/get-api-key')" class="btn btn-outline-dark">Get An API Token</button>
+      </div>
+    </div>
+
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Google Sheet URL</span>
+      </div>
+      <input ng-change="save('sheetUrl', connections.sheetUrl)" placeholder="Enter Sheet URL" ng-model="connections.sheetUrl" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="open(connections.sheetUrl)" class="btn btn-outline-dark">Open Sheet</button>
+      </div>
+    </div>
+
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello API Key</span>
+      </div>
+      <input ng-change="save('trelloApiKey', connections.trelloApi); updateListId();" placeholder="Enter API Key" ng-model="connections.trelloApiKey" type="text" class="form-control">
+      <div class="input-group-append">
+        <button ng-click="open('https://trello.com/app-key')" class="btn btn-outline-dark">Find Your API Key</button>
+      </div>
+    </div>
+
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello OAuth Token</span>
+      </div>
+      <input ng-change="save('trelloOauthToken', connections.trelloOauthToken); updateListId();" placeholder="Enter OAuth Token" ng-model="connections.trelloOauthToken" type="text" class="form-control">
+      <div class="input-group-append">
+        <button ng-click="open('https://trello.com/app-key')" class="btn btn-outline-dark">Generate A Dev Token</button>
+      </div>
+    </div>
+
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Trello Board</span>
+      </div>
+      <input ng-change="save('boardUrl', connections.boardUrl); updateListId();" placeholder="Enter Board URL" ng-model="connections.boardUrl" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="open(connections.boardUrl)" class="btn btn-outline-dark">Open Board</button>
+      </div>
+    </div>
+  </div>
+</div>
