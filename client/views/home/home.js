@@ -20,6 +20,7 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.tagData = [];
   $scope.showConnections = false;
   $scope.selectedTopics = [];
+  $scope.listName = "instagram";
 
   $scope.connections = {
     googleApiToken: storageService.get('googleApiToken'),
@@ -88,7 +89,7 @@ angular.module('myApp.home', ['ngRoute'])
                              $scope.connections.boardUrl)
       .then(function(res, err){
         res.data.forEach(function(list){
-          if (list.name.toLowerCase() === 'active') {
+          if (list.name.toLowerCase() === $scope.listName) {
             $scope.connections.listId = list.id;
             storageService.set('listId', list.id);
           }

@@ -1,12 +1,14 @@
-# Angular GraphQL Prototyper
+# Content Fountain
 
-Useful for prototyping static sites with minimal MVC & API functionality.
+Brainstorm, generate, store and properly tag content ideas for improving brand presence on various social media outlets.
 
-### Installation / Usage
+Check it out [here](http://nafeu.com/content-fountain).
+
+### Development
 
 ```
-git clone https://github.com/nafeu/quick-angular1-spa-starter.git <PROJECT NAME>
-cd <PROJECT NAME>
+git clone https://github.com/nafeu/content-fountain.git
+cd content-fountain
 node server.js
 ```
 
