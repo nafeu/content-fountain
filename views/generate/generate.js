@@ -33,6 +33,8 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.trelloSaveStatus = "Save to Trello";
   $scope.tagLoadStatus = "Load Tag Data";
   $scope.idea = "";
+  $scope.showImport = false;
+  $scope.connectionCode = "";
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
@@ -196,6 +198,22 @@ angular.module('myApp.generate', ['ngRoute'])
     } else {
       $scope.createCard();
     }
+  }
+
+  $scope.copyConnections = function() {
+    var textarea = $window.document.createElement('textarea');
+    textarea.setAttribute('style', 'opacity: 0');
+    textarea.textContent = storageService.export();
+    $window.document.body.appendChild(textarea);
+    textarea.select();
+    $window.document.execCommand('copy');
+    textarea.remove();
+  }
+
+  $scope.importConnections = function() {
+    storageService.load($scope.connectionCode, function(){
+      $window.location.reload();
+    });
   }
 
 }]);
