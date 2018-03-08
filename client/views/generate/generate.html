@@ -78,7 +78,20 @@
 <div class="row">
   <div class="col-md-12">
     <div class="input-group mb-2">
-      <button ng-click="showConnections = !showConnections" type="button" class="btn btn-sm btn-outline-dark">Edit Connections</button>
+      <button ng-class="{'btn-dark': showConnections, 'btn-outline-dark': !showConnections}" ng-click="showConnections = !showConnections" type="button" class="btn btn-sm  mr-2">Edit Connections</button>
+      <button ng-click="copyConnections()" type="button" class="btn btn-sm btn-outline-dark mr-2">Copy Connections To Clipboard</button>
+      <button ng-class="{'btn-dark': showImport, 'btn-outline-dark': !showImport}" ng-click="showImport = !showImport" type="button" class="btn btn-sm btn-outline-dark">Import Connections</button>
+    </div>
+  </div>
+  <div ng-show="showImport" class="col-md-12">
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Connection Code</span>
+      </div>
+      <input ng-change="save('boardUrl', connections.boardUrl); updateListId();" placeholder="Enter Connection Code" ng-model="connectionCode" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="importConnections(connectionCode)" class="btn btn-outline-secondary">Load Connections</button>
+      </div>
     </div>
   </div>
   <div ng-show="showConnections" class="col-md-12">
