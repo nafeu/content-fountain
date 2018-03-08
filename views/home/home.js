@@ -22,6 +22,20 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.selectedTopics = [];
   $scope.listName = "instagram";
 
+  $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
+  $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
+  $scope.selectedFocalpoint = "";
+  $scope.selectedMediaType = "";
+  $scope.relation = "";
+
+  $scope.selectFocalpoint = function(selection) {
+    $scope.selectedFocalpoint = selection;
+  }
+
+  $scope.selectMediaType = function(selection) {
+    $scope.selectedMediaType = selection;
+  }
+
   $scope.connections = {
     googleApiToken: storageService.get('googleApiToken'),
     trelloApiKey: storageService.get('trelloApiKey'),
@@ -100,7 +114,7 @@ angular.module('myApp.home', ['ngRoute'])
 
   $scope.createCard = function() {
     var data = {
-      "name": $scope.caption,
+      "name": $scope.idea,
       "desc": "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags,
       "pos": "top",
     }
@@ -115,5 +129,8 @@ angular.module('myApp.home', ['ngRoute'])
     })
   }
 
+  $scope.insertIdea = function() {
+    $scope.idea = $scope.selectedFocalpoint + " in the form of a " + $scope.selectedMediaType + " about " + $scope.relation;
+  }
 
 }]);
