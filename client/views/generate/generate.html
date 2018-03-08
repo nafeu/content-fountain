@@ -65,8 +65,8 @@
         <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
         <h5 class="card-title">Tags</h5>
         <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
-        <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#caption-output">Copy Caption</button>
-        <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#tag-output">Copy Tags</button>
+        <button type="button" ng-click="updateCopyMessage('copyCaptionStatus')" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#caption-output">{{copyCaptionStatus}}</button>
+        <button type="button" ng-click="updateCopyMessage('copyTagsStatus')" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#tag-output">{{copyTagsStatus}}</button>
         <button ng-click="saveToTrello()" type="button" class="btn btn-outline-secondary mr-2 mb-2">{{trelloSaveStatus}}</button>
         <button ng-click="clearIdea()" type="button" class="btn btn-outline-secondary mr-2 mb-2">Clear</button>
       </div>
@@ -79,7 +79,7 @@
   <div class="col-md-12">
     <div class="input-group mb-2">
       <button ng-class="{'btn-dark': showConnections, 'btn-outline-dark': !showConnections}" ng-click="showConnections = !showConnections" type="button" class="btn btn-sm  mr-2">Edit Connections</button>
-      <button ng-click="copyConnections()" type="button" class="btn btn-sm btn-outline-dark mr-2">Copy Connections To Clipboard</button>
+      <button ng-click="copyConnections()" type="button" class="btn btn-sm btn-outline-dark mr-2">{{copyConnectionsStatus}}</button>
       <button ng-class="{'btn-dark': showImport, 'btn-outline-dark': !showImport}" ng-click="showImport = !showImport" type="button" class="btn btn-sm btn-outline-dark">Import Connections</button>
     </div>
   </div>

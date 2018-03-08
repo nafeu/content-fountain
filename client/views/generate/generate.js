@@ -35,6 +35,9 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.idea = "";
   $scope.showImport = false;
   $scope.connectionCode = "";
+  $scope.copyConnectionsStatus = "Copy Connections To Clipboard";
+  $scope.copyTagsStatus = "Copy Tags";
+  $scope.copyCaptionStatus = "Copy Caption";
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
@@ -208,12 +211,21 @@ angular.module('myApp.generate', ['ngRoute'])
     textarea.select();
     $window.document.execCommand('copy');
     textarea.remove();
+    $scope.updateCopyMessage('copyConnectionsStatus');
   }
 
   $scope.importConnections = function() {
     storageService.load($scope.connectionCode, function(){
       $window.location.reload();
     });
+  }
+
+  $scope.updateCopyMessage = function(name) {
+    var oldMessage = $scope[name];
+    $scope[name] = "Copied!";
+    $timeout(function(){
+      $scope[name] = oldMessage;
+    }, 1000)
   }
 
 }]);
