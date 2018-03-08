@@ -1,6 +1,39 @@
 <div class="row">
 
   <div class="col-xs-12 col-sm-12 col-md-6">
+    <h5 class="card-title">Pick your focal point</h5>
+    <div class="input-group mb-2">
+      <button
+        ng-repeat="focalpoint in focalpoints"
+        ng-click="selectFocalpoint(focalpoint)"
+        ng-class="{
+          'btn-danger': selectedFocalpoint == focalpoint,
+          'btn-outline-danger': selectedFocalpoint != focalpoint
+        }"
+        class="btn mr-2 mb-2">
+        {{focalpoint}}
+      </button>
+    </div>
+    <h5 class="card-title">Pick your media type</h5>
+    <div class="input-group mb-2">
+      <button
+        ng-repeat="mediaType in mediaTypes"
+        ng-click="selectMediaType(mediaType)"
+        ng-class="{
+          'btn-success': selectedMediaType == mediaType,
+          'btn-outline-success': selectedMediaType != mediaType
+        }"
+        class="btn mr-2 mb-2">
+        {{mediaType}}
+      </button>
+    </div>
+    <h5 class="card-title">Enter the relation</h5>
+    <div class="input-group mb-3">
+      <input placeholder="What is your idea about?" ng-model="relation" type="text" class="form-control">
+      <div class="input-group-append">
+        <button type="button" ng-click="insertIdea()" class="btn btn-outline-info">Insert Idea</button>
+      </div>
+    </div>
     <h5 class="card-title">Choose Your Topics</h5>
     <div class="input-group mb-2">
       <button ng-click="loadTagData()" type="button" class="btn btn-sm btn-outline-secondary">Load Tag Data</button>
@@ -21,8 +54,10 @@
 
   <div class="col-xs-12 col-sm-12 col-md-6">
     <h5 class="card-title">Fresh Content</h5>
-    <textarea placeholder="Enter caption" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
+    <textarea placeholder="Enter idea" id="idea-output" class="form-control mb-2" rows="2" ng-model="idea"></textarea>
+    <textarea placeholder="Enter caption (optional)" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
     <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
+    <h5 class="card-title">Tags</h5>
     <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
     <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#caption-output">Copy Caption</button>
     <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#tag-output">Copy Tags</button>
