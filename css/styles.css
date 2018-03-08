@@ -111,6 +111,10 @@ body {
   margin-left: 10px;
 }
 
+textarea {
+  resize: none
+}
+
 
 /* ==========================================================================
    Helper classes

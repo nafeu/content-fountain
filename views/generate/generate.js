@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.home', ['ngRoute'])
+angular.module('myApp.generate', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/home', {
-    templateUrl: 'views/home/home.html',
-    controller: 'HomeCtrl'
+  $routeProvider.when('/generate', {
+    templateUrl: 'views/generate/generate.html',
+    controller: 'GenerateCtrl'
   });
 }])
 
-.controller('HomeCtrl', ['$scope',
+.controller('GenerateCtrl', ['$scope',
                          '$window',
                          '$timeout',
                          'apiService',
@@ -32,6 +32,7 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.listName = "instagram";
   $scope.trelloSaveStatus = "Save to Trello";
   $scope.tagLoadStatus = "Load Tag Data";
+  $scope.idea = "";
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
@@ -183,6 +184,18 @@ angular.module('myApp.home', ['ngRoute'])
 
   function getFormattedTags() {
     return "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags;
+  }
+
+  $scope.saveToTrello = function() {
+    if ($scope.idea.length < 1) {
+      $window.document.getElementById('idea-output').focus();
+      $scope.trelloSaveStatus = "Idea Text Required";
+      $timeout(function(){
+        $scope.trelloSaveStatus = "Save To Trello";
+      }, 2000)
+    } else {
+      $scope.createCard();
+    }
   }
 
 }]);
