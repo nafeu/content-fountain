@@ -4,12 +4,12 @@
 var app = angular.module('myApp', [
   'ngRoute',
   'myApp.about',
-  'myApp.home',
+  'myApp.generate',
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
-  $routeProvider.otherwise({redirectTo: '/home'});
+  $routeProvider.otherwise({redirectTo: '/generate'});
 }]);
 
 app.directive('ngEnter', function() {

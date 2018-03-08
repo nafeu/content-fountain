@@ -1,3 +1,7 @@
+<div class="input-group mb-4">
+  <a href="#!/generate" class="btn btn-sm btn-dark mr-2">Generate</a>
+  <a href="#!/about" class="btn btn-sm btn-outline-dark">About</a>
+</div>
 <div class="row">
 
   <div class="col-xs-12 col-sm-12 col-md-6">
@@ -7,8 +11,8 @@
         ng-repeat="focalpoint in focalpoints"
         ng-click="selectFocalpoint(focalpoint)"
         ng-class="{
-          'btn-danger': selectedFocalpoint == focalpoint,
-          'btn-outline-danger': selectedFocalpoint != focalpoint
+          'btn-info': selectedFocalpoint == focalpoint,
+          'btn-outline-info': selectedFocalpoint != focalpoint
         }"
         class="btn mr-2 mb-2">
         {{focalpoint}}
@@ -20,23 +24,23 @@
         ng-repeat="mediaType in mediaTypes"
         ng-click="selectMediaType(mediaType)"
         ng-class="{
-          'btn-success': selectedMediaType == mediaType,
-          'btn-outline-success': selectedMediaType != mediaType
+          'btn-info': selectedMediaType == mediaType,
+          'btn-outline-info': selectedMediaType != mediaType
         }"
         class="btn mr-2 mb-2">
         {{mediaType}}
       </button>
     </div>
-    <h5 class="card-title">Enter the relation</h5>
+    <h5 class="card-title">Decide on your topic</h5>
     <div class="input-group mb-3">
-      <input placeholder="What is your idea about?" ng-model="relation" type="text" class="form-control">
+      <input placeholder="What is your idea about?" ng-enter="insertIdea()" ng-model="relation" type="text" class="form-control">
       <div class="input-group-append">
         <button type="button" ng-click="insertIdea()" class="btn btn-outline-info">Insert Idea</button>
       </div>
     </div>
     <h5 class="card-title">Choose Your Root Tags</h5>
     <div class="input-group mb-2">
-      <button ng-click="loadTagData()" type="button" class="btn btn-sm btn-outline-secondary">{{tagLoadStatus}}</button>
+      <button ng-click="loadTagData()" type="button" class="btn btn-sm btn-outline-dark">{{tagLoadStatus}}</button>
     </div>
     <div class="input-group mb-2">
       <button
@@ -53,16 +57,20 @@
   </div>
 
   <div class="col-xs-12 col-sm-12 col-md-6">
-    <h5 class="card-title">Fresh Content</h5>
-    <textarea placeholder="Enter idea" id="idea-output" class="form-control mb-2" rows="2" ng-model="idea"></textarea>
-    <textarea placeholder="Enter caption (optional)" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
-    <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
-    <h5 class="card-title">Tags</h5>
-    <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
-    <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#caption-output">Copy Caption</button>
-    <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#tag-output">Copy Tags</button>
-    <button ng-click="createCard()" type="button" class="btn btn-outline-secondary mr-2 mb-2">{{trelloSaveStatus}}</button>
-    <button ng-click="clearIdea()" type="button" class="btn btn-outline-secondary mr-2 mb-2">Clear</button>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Finalized Content</h5>
+        <textarea placeholder="Enter idea" id="idea-output" class="form-control mb-2" rows="2" ng-model="idea"></textarea>
+        <textarea placeholder="Enter caption (optional)" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
+        <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
+        <h5 class="card-title">Tags</h5>
+        <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
+        <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#caption-output">Copy Caption</button>
+        <button type="button" class="btn btn-outline-secondary mr-2 mb-2" data-clipboard-target="#tag-output">Copy Tags</button>
+        <button ng-click="saveToTrello()" type="button" class="btn btn-outline-secondary mr-2 mb-2">{{trelloSaveStatus}}</button>
+        <button ng-click="clearIdea()" type="button" class="btn btn-outline-secondary mr-2 mb-2">Clear</button>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -70,7 +78,7 @@
 <div class="row">
   <div class="col-md-12">
     <div class="input-group mb-2">
-      <button ng-click="showConnections = !showConnections" type="button" class="btn btn-sm btn-outline-secondary">Edit Connections</button>
+      <button ng-click="showConnections = !showConnections" type="button" class="btn btn-sm btn-outline-dark">Edit Connections</button>
     </div>
   </div>
   <div ng-show="showConnections" class="col-md-12">
