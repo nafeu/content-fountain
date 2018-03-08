@@ -31,11 +31,10 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.selectedRoots = [];
   $scope.listName = "instagram";
   $scope.trelloSaveStatus = "Save to Trello";
-  $scope.tagLoadStatus = "Load Data";
+  $scope.tagLoadStatus = "Refresh Data";
   $scope.idea = "";
   $scope.showImport = false;
   $scope.connectionCode = "";
-  $scope.copyConnectionsStatus = "Copy Connections To Clipboard";
   $scope.copyTagsStatus = "Copy Tags";
   $scope.copyCaptionStatus = "Copy Caption";
   $scope.contentQueue = [];
@@ -82,28 +81,32 @@ angular.module('myApp.generate', ['ngRoute'])
   }
 
   $scope.loadTagData = function() {
-    var sheetId = $scope.connections.sheetUrl.match("d\/(.*)\/edit")[1];
-    $scope.tagLoadStatus = "Loading...";
-    apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res){
-      $scope.tagData = [];
-      res.data.values.forEach(function(item){
-        var tagList = ["MISSING-TAGS-FOR-" + item[1]];
-        if (item.length > 1) {
-          tagList = item[2].split(" ").map(function(tag){
-            return tag.substr(1);
+    if ($scope.connections.googleApiToken.length > 0 && $scope.connections.sheetUrl.length > 0) {
+      var sheetId = $scope.connections.sheetUrl.match("d\/(.*)\/edit")[1];
+      $scope.tagLoadStatus = "Reloading...";
+      apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res){
+        $scope.tagData = [];
+        if (res.data.values.length > 0) {
+          res.data.values.forEach(function(item){
+            if (item.length > 0) {
+              var tagList = ["MISSING-TAGS-FOR-" + item[1]];
+              tagList = item[2].split(" ").map(function(tag){
+                return tag.substr(1);
+              });
+              $scope.tagData.push({
+                topic: item[0],
+                rootTag: item[1],
+                tags: tagList,
+              })
+            }
           });
         }
-        $scope.tagData.push({
-          topic: item[0],
-          rootTag: item[1],
-          tags: tagList,
-        })
+        $scope.tagLoadStatus = "Refresh Data";
+      }, function(err){
+        $scope.tagLoadStatus = "An error occured, try again";
+        alert(JSON.stringify(err));
       });
-      $scope.tagLoadStatus = "Refresh Data";
-    }, function(err){
-      $scope.tagLoadStatus = "An error occured, try again";
-      alert(JSON.stringify(err));
-    });
+    }
   }
 
   $scope.updateTags = function() {
@@ -192,6 +195,16 @@ angular.module('myApp.generate', ['ngRoute'])
     return "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags;
   }
 
+  function getTrelloAuthStatus() {
+    if ($scope.connections.trelloApiKey.length > 0 &&
+        $scope.connections.trelloOauthToken.length > 0 &&
+        $scope.connections.boardUrl.length > 0 &&
+        $scope.connections.listId.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
   $scope.saveToTrello = function() {
     if ($scope.idea.length < 1) {
       $window.document.getElementById('idea-output').focus();
@@ -200,33 +213,20 @@ angular.module('myApp.generate', ['ngRoute'])
         $scope.trelloSaveStatus = "Save To Trello";
       }, 2000)
     } else {
-      $scope.createCard();
+      if (getTrelloAuthStatus()) {
+        $scope.createCard();
+      }
     }
-  }
-
-  $scope.copyConnections = function() {
-    var textarea = $window.document.createElement('textarea');
-    textarea.setAttribute('style', 'opacity: 0');
-    textarea.textContent = storageService.export();
-    $window.document.body.appendChild(textarea);
-    textarea.select();
-    $window.document.execCommand('copy');
-    textarea.remove();
-    $scope.updateCopyMessage('copyConnectionsStatus');
-  }
-
-  $scope.importConnections = function() {
-    storageService.load($scope.connectionCode, function(){
-      $window.location.reload();
-    });
   }
 
   $scope.updateCopyMessage = function(name) {
     var oldMessage = $scope[name];
-    $scope[name] = "Copied!";
+    $scope[name] = "Copied to clipboard!";
     $timeout(function(){
       $scope[name] = oldMessage;
     }, 1000)
   }
+
+  $scope.loadTagData();
 
 }]);
