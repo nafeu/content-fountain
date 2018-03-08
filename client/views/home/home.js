@@ -54,14 +54,15 @@ angular.module('myApp.home', ['ngRoute'])
     apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res, err){
       $scope.tagData = [];
       res.data.values.forEach(function(item){
-        var tagList = ["MISSING-TAGS-FOR-" + item[0]];
+        var tagList = ["MISSING-TAGS-FOR-" + item[1]];
         if (item.length > 1) {
-          tagList = item[1].split(" ").map(function(tag){
+          tagList = item[2].split(" ").map(function(tag){
             return tag.substr(1);
           });
         }
         $scope.tagData.push({
-          category: item[0],
+          topic: item[0],
+          root: item[1],
           tags: tagList,
         })
       });
@@ -72,9 +73,9 @@ angular.module('myApp.home', ['ngRoute'])
     var numTags = Math.floor(MAX_TAGS / $scope.selectedTopics.length);
 
     $scope.tags = "";
-    $scope.selectedTopics.forEach(function(topic){
+    $scope.selectedTopics.forEach(function(root){
       $scope.tagData.forEach(function(collection){
-        if (collection.category === topic) {
+        if (collection.root === root) {
           for (var i = 0; i < numTags; i++) {
             $scope.tags += "#" + collection.tags[i] + " ";
           }
