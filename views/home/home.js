@@ -9,7 +9,16 @@ angular.module('myApp.home', ['ngRoute'])
   });
 }])
 
-.controller('HomeCtrl', ['$scope', '$window', 'apiService', 'storageService', function($scope, $window, apiService, storageService) {
+.controller('HomeCtrl', ['$scope',
+                         '$window',
+                         '$timeout',
+                         'apiService',
+                         'storageService',
+                         function($scope,
+                                  $window,
+                                  $timeout,
+                                  apiService,
+                                  storageService) {
 
   new ClipboardJS('.btn');
 
@@ -19,8 +28,10 @@ angular.module('myApp.home', ['ngRoute'])
   $scope.tags = "";
   $scope.tagData = [];
   $scope.showConnections = false;
-  $scope.selectedTopics = [];
+  $scope.selectedRoots = [];
   $scope.listName = "instagram";
+  $scope.trelloSaveStatus = "Save to Trello";
+  $scope.tagLoadStatus = "Load Tag Data";
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
@@ -50,11 +61,11 @@ angular.module('myApp.home', ['ngRoute'])
   }
 
   $scope.toggleTopic = function(topic) {
-    var index = $scope.selectedTopics.indexOf(topic);
+    var index = $scope.selectedRoots.indexOf(topic);
     if (index !== -1) {
-      $scope.selectedTopics.splice(index, 1);
+      $scope.selectedRoots.splice(index, 1);
     } else {
-      $scope.selectedTopics.push(topic);
+      $scope.selectedRoots.push(topic);
     }
     $scope.updateTags();
   }
@@ -65,7 +76,8 @@ angular.module('myApp.home', ['ngRoute'])
 
   $scope.loadTagData = function() {
     var sheetId = $scope.connections.sheetUrl.match("d\/(.*)\/edit")[1];
-    apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res, err){
+    $scope.tagLoadStatus = "Loading...";
+    apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res){
       $scope.tagData = [];
       res.data.values.forEach(function(item){
         var tagList = ["MISSING-TAGS-FOR-" + item[1]];
@@ -76,25 +88,34 @@ angular.module('myApp.home', ['ngRoute'])
         }
         $scope.tagData.push({
           topic: item[0],
-          root: item[1],
+          rootTag: item[1],
           tags: tagList,
         })
       });
+      $scope.tagLoadStatus = "Refresh Tag Data";
+    }, function(err){
+      $scope.tagLoadStatus = "An error occured, try again";
+      alert(JSON.stringify(err));
     });
   }
 
   $scope.updateTags = function() {
-    var numTags = Math.floor(MAX_TAGS / $scope.selectedTopics.length);
+    var numTags = Math.floor(MAX_TAGS / $scope.selectedRoots.length);
+    var selectedTags = [];
 
     $scope.tags = "";
-    $scope.selectedTopics.forEach(function(root){
+    $scope.selectedRoots.forEach(function(rootTag){
       $scope.tagData.forEach(function(collection){
-        if (collection.root === root) {
+        if (collection.rootTag === rootTag) {
           for (var i = 0; i < numTags; i++) {
-            $scope.tags += "#" + collection.tags[i] + " ";
+            selectedTags.push(collection.tags[i]);
           }
         }
       });
+      $scope.tags = "#" + selectedTags
+        .filter(function(value, index){
+          return selectedTags.indexOf(value) == index;
+        }).join(" #");
     });
   }
 
@@ -113,6 +134,7 @@ angular.module('myApp.home', ['ngRoute'])
   }
 
   $scope.createCard = function() {
+    $scope.trelloSaveStatus = "Saving...";
     apiService.createCard(authorizeTrelloRequest({
       "idList": $scope.connections.listId,
       "name": $scope.idea,
@@ -129,13 +151,27 @@ angular.module('myApp.home', ['ngRoute'])
             "text": $scope.caption
           }));
         }
+        $scope.trelloSaveStatus = "Success";
+        $timeout(function(){
+          $scope.trelloSaveStatus = "Save to Trello";
+        }, 2000)
       }, function(err){
+        $scope.trelloSaveStatus = "An error occured, try again";
         alert(JSON.stringify(err));
       })
   }
 
   $scope.insertIdea = function() {
     $scope.idea = $scope.selectedFocalpoint + " in the form of a " + $scope.selectedMediaType + " about " + $scope.relation;
+  }
+
+  $scope.clearIdea = function() {
+    $scope.caption = "";
+    $scope.tags = "";
+    $scope.selectedRoots = [];
+    $scope.selectedFocalpoint = "";
+    $scope.selectedMediaType = "";
+    $scope.relation = "";
   }
 
   function authorizeTrelloRequest(obj) {
