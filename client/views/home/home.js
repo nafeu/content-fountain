@@ -99,9 +99,9 @@ angular.module('myApp.home', ['ngRoute'])
   }
 
   $scope.updateListId = function() {
-    apiService.getBoardLists($scope.connections.trelloApiKey,
-                             $scope.connections.trelloOauthToken,
-                             $scope.connections.boardUrl)
+    apiService.getBoardLists(authorizeTrelloRequest({
+      "boardUrl": $scope.connections.boardUrl,
+    }))
       .then(function(res, err){
         res.data.forEach(function(list){
           if (list.name.toLowerCase() === $scope.listName) {
@@ -113,24 +113,40 @@ angular.module('myApp.home', ['ngRoute'])
   }
 
   $scope.createCard = function() {
-    var data = {
+    apiService.createCard(authorizeTrelloRequest({
+      "idList": $scope.connections.listId,
       "name": $scope.idea,
-      "desc": "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags,
-      "pos": "top",
-    }
-    apiService.createCard($scope.connections.trelloApiKey,
-                          $scope.connections.trelloOauthToken,
-                          $scope.connections.listId,
-                          data)
-    .then(function(res){
-      alert(JSON.stringify(res));
-    }, function(err){
-      alert(JSON.stringify(err));
-    })
+      "pos": "top"
+    }))
+      .then(function(cardResponse){
+        apiService.addCommentToCard(authorizeTrelloRequest({
+          "idCard": cardResponse.data.id,
+          "text": getFormattedTags()
+        }));
+        if ($scope.caption.length > 0) {
+          apiService.addCommentToCard(authorizeTrelloRequest({
+            "idCard": cardResponse.data.id,
+            "text": $scope.caption
+          }));
+        }
+      }, function(err){
+        alert(JSON.stringify(err));
+      })
   }
 
   $scope.insertIdea = function() {
     $scope.idea = $scope.selectedFocalpoint + " in the form of a " + $scope.selectedMediaType + " about " + $scope.relation;
+  }
+
+  function authorizeTrelloRequest(obj) {
+    return Object.assign({
+      "key": $scope.connections.trelloApiKey,
+      "token": $scope.connections.trelloOauthToken
+    }, obj)
+  }
+
+  function getFormattedTags() {
+    return "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags;
   }
 
 }]);

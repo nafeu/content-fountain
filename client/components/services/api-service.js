@@ -9,21 +9,24 @@ app.service('apiService', function($http) {
     return $http.get(requestUrl);
   };
 
-  this.getBoardLists = function(apiKey, oauthToken, boardUrl) {
+  this.getBoardLists = function(req) {
     var trelloApi = "https://api.trello.com/1/boards/";
-    var boardId = boardUrl.match("\/b\/(.*)\/")[1];
+    var boardId = req.boardUrl.match("\/b\/(.*)\/")[1];
     var option = "/lists";
-    var auth = "?key=" + apiKey + "&token=" + oauthToken;
+    var auth = "?key=" + req.key + "&token=" + req.token;
     var requestUrl = trelloApi + boardId + option + auth;
     return $http.get(requestUrl);
   }
 
-  this.createCard = function(apiKey, oauthToken, idList, data) {
+  this.createCard = function(req) {
     var trelloApi = "https://api.trello.com/1/cards";
-    var params = data;
-    params.key = apiKey;
-    params.token = oauthToken;
-    params.idList = idList;
-    return $http.post(trelloApi, params);
+    return $http.post(trelloApi, req);
+  }
+
+  this.addCommentToCard = function(req) {
+    var trelloApi = "https://api.trello.com/1/cards/";
+    var action = "/actions/comments";
+    var requestUrl = trelloApi + req.idCard + action;
+    return $http.post(requestUrl, req);
   }
 });
