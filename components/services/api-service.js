@@ -24,7 +24,6 @@ app.service('apiService', function($http) {
     params.key = apiKey;
     params.token = oauthToken;
     params.idList = idList;
-    console.log(params);
     return $http.post(trelloApi, params);
   }
 });
