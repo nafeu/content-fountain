@@ -13,11 +13,13 @@ angular.module('myApp.generate', ['ngRoute'])
                          '$window',
                          '$timeout',
                          'apiService',
+                         'modalService',
                          'storageService',
                          function($scope,
                                   $window,
                                   $timeout,
                                   apiService,
+                                  modalService,
                                   storageService) {
 
   new ClipboardJS('.btn');
@@ -43,6 +45,7 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.copyCaptionStatus = "Copy Caption";
   $scope.availableCategories = [];
   $scope.selectedCategory = "";
+  $scope.newAdditions = [];
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
@@ -182,10 +185,13 @@ angular.module('myApp.generate', ['ngRoute'])
         $scope.trelloSaveStatus = "Success";
         $timeout(function(){
           $scope.trelloSaveStatus = "Save to Trello";
-        }, 2000)
+        }, 1000)
+        $scope.newAdditions.push({
+          "name": $scope.idea,
+          "url": cardResponse.data.url
+        })
       }, function(err){
-        $scope.trelloSaveStatus = "An error occured, try again";
-        alert(JSON.stringify(err));
+        $scope.showAlert("Error", "Your card was not saved, try again");
       })
   }
 
@@ -271,6 +277,19 @@ angular.module('myApp.generate', ['ngRoute'])
       $scope.selectedCategory = option;
     }
     $scope.save("selectedCategory", option);
+  }
+
+  $scope.showAlert = function(header, body) {
+    modalService
+      .showModal(
+        {
+          templateUrl: 'views/partials/alert.html'
+        },
+        {
+          headerText: header,
+          bodyText: body
+        }
+      ).then(function(result){});
   }
 
   $scope.loadTagData();
