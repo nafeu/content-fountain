@@ -9,7 +9,18 @@ angular.module('myApp.connect', ['ngRoute'])
   });
 }])
 
-.controller('ConnectCtrl', ['$scope', '$window', '$timeout', 'apiService', 'storageService', function($scope, $window, $timeout, apiService, storageService) {
+.controller('ConnectCtrl', ['$scope',
+                            '$window',
+                            '$timeout',
+                            'apiService',
+                            'modalService',
+                            'storageService',
+                            function($scope,
+                                     $window,
+                                     $timeout,
+                                     apiService,
+                                     modalService,
+                                     storageService) {
 
   $scope.copyConnectionsStatus = "Copy Existing Connection Information To Clipboard";
   $scope.connectionCode = "";
@@ -64,6 +75,19 @@ angular.module('myApp.connect', ['ngRoute'])
 
   $scope.open = function(url) {
     $window.open(url, "_blank");
+  }
+
+  $scope.showAlert = function(header, body) {
+    modalService
+      .showModal(
+        {
+          templateUrl: 'views/partials/alert.html'
+        },
+        {
+          headerText: header,
+          bodyText: body
+        }
+      ).then(function(result){});
   }
 
 }]);
