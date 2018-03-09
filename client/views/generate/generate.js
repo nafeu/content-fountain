@@ -24,37 +24,41 @@ angular.module('myApp.generate', ['ngRoute'])
 
   var MAX_TAGS = 30;
 
-  $scope.caption = "";
-  $scope.tags = "";
+  $scope.caption = storageService.get('caption');
+  $scope.tags = storageService.get('tags');
+  $scope.selectedFocalpoint = storageService.get('selectedFocalpoint');
+  $scope.selectedMediaType = storageService.get('selectedMediatype');
+  $scope.topic = storageService.get('topic');
+  $scope.idea = storageService.get('idea');
+  $scope.selectedRoots = storageService.get('selectedRoots', []);
+
   $scope.tagData = [];
   $scope.showConnections = false;
-  $scope.selectedRoots = [];
   $scope.listName = "instagram";
   $scope.trelloSaveStatus = "Save to Trello";
   $scope.tagLoadStatus = "Refresh Data";
-  $scope.idea = "";
   $scope.showImport = false;
   $scope.connectionCode = "";
   $scope.copyTagsStatus = "Copy Tags";
   $scope.copyCaptionStatus = "Copy Caption";
-  $scope.contentQueue = [];
+  $scope.availableCategories = [];
+  $scope.selectedCategory = "";
 
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
-  $scope.selectedFocalpoint = "";
-  $scope.selectedMediaType = "";
-  $scope.relation = "";
 
   $scope.selectFocalpoint = function(selection) {
     $scope.selectedFocalpoint = selection;
+    $scope.save('selectedFocalpoint', selection);
   }
 
   $scope.selectMediaType = function(selection) {
     $scope.selectedMediaType = selection;
+    $scope.save('selectedMediaType', selection);
   }
 
   $scope.connections = {
-    googleApiToken: storageService.get('googleApiToken'),
+    googleApiKey: storageService.get('googleApiKey'),
     trelloApiKey: storageService.get('trelloApiKey'),
     trelloOauthToken: storageService.get('trelloOauthToken'),
     sheetUrl: storageService.get('sheetUrl'),
@@ -66,14 +70,15 @@ angular.module('myApp.generate', ['ngRoute'])
     $window.open(url, "_blank");
   }
 
-  $scope.toggleTopic = function(topic) {
-    var index = $scope.selectedRoots.indexOf(topic);
+  $scope.toggleRootTag = function(rootTag) {
+    var index = $scope.selectedRoots.indexOf(rootTag);
     if (index !== -1) {
       $scope.selectedRoots.splice(index, 1);
     } else {
-      $scope.selectedRoots.push(topic);
+      $scope.selectedRoots.push(rootTag);
     }
     $scope.updateTags();
+    $scope.save("selectedRoots", $scope.selectedRoots);
   }
 
   $scope.save = function(key, value) {
@@ -81,11 +86,12 @@ angular.module('myApp.generate', ['ngRoute'])
   }
 
   $scope.loadTagData = function() {
-    if ($scope.connections.googleApiToken.length > 0 && $scope.connections.sheetUrl.length > 0) {
+    if ($scope.connections.googleApiKey.length > 0 && $scope.connections.sheetUrl.length > 0) {
       var sheetId = $scope.connections.sheetUrl.match("d\/(.*)\/edit")[1];
       $scope.tagLoadStatus = "Reloading...";
-      apiService.getTagData($scope.connections.googleApiToken, sheetId).then(function(res){
+      apiService.getTagData($scope.connections.googleApiKey, sheetId).then(function(res){
         $scope.tagData = [];
+        $scope.availableCategories = [];
         if (res.data.values.length > 0) {
           res.data.values.forEach(function(item){
             if (item.length > 0) {
@@ -93,11 +99,14 @@ angular.module('myApp.generate', ['ngRoute'])
               tagList = item[2].split(" ").map(function(tag){
                 return tag.substr(1);
               });
+              if ($scope.availableCategories.indexOf(item[0]) < 0) {
+                $scope.availableCategories.push(item[0]);
+              }
               $scope.tagData.push({
-                topic: item[0],
+                category: item[0],
                 rootTag: item[1],
                 tags: tagList,
-              })
+              });
             }
           });
         }
@@ -126,6 +135,7 @@ angular.module('myApp.generate', ['ngRoute'])
         .filter(function(value, index){
           return selectedTags.indexOf(value) == index;
         }).join(" #");
+      $scope.save('tags', $scope.tags);
     });
   }
 
@@ -172,7 +182,8 @@ angular.module('myApp.generate', ['ngRoute'])
   }
 
   $scope.insertIdea = function() {
-    $scope.idea = $scope.selectedFocalpoint + " in the form of a " + $scope.selectedMediaType + " about " + $scope.relation;
+    $scope.idea = $scope.selectedFocalpoint + " in the form of a " + $scope.selectedMediaType + " about " + $scope.topic;
+    $scope.save('idea', $scope.idea);
   }
 
   $scope.clearIdea = function() {
@@ -181,7 +192,17 @@ angular.module('myApp.generate', ['ngRoute'])
     $scope.selectedRoots = [];
     $scope.selectedFocalpoint = "";
     $scope.selectedMediaType = "";
-    $scope.relation = "";
+    $scope.topic = "";
+    $scope.saveContentState();
+  }
+
+  $scope.saveContentState = function() {
+    $scope.save('caption', $scope.caption);
+    $scope.save('tags', $scope.tags);
+    $scope.save('selectedRoots', $scope.selectedRoots);
+    $scope.save('selectedFocalpoint', $scope.selectedFocalpoint);
+    $scope.save('selectedMediaType', $scope.selectedMediaType);
+    $scope.save('topic', $scope.topic);
   }
 
   function authorizeTrelloRequest(obj) {
@@ -227,6 +248,23 @@ angular.module('myApp.generate', ['ngRoute'])
     }, 1000)
   }
 
+  $scope.categoryFilter = function(collection) {
+    if ($scope.selectedCategory.length == 0) {
+      return true;
+    }
+    return collection.category === $scope.selectedCategory;
+  };
+
+  $scope.toggleCategory = function(option) {
+    if ($scope.selectedCategory == option) {
+      $scope.selectedCategory = "";
+    } else {
+      $scope.selectedCategory = option;
+    }
+    $scope.save("selectedCategory", option);
+  }
+
   $scope.loadTagData();
+  $scope.updateListId();
 
 }]);

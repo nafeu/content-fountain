@@ -25,9 +25,9 @@
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">Google API Token</span>
       </div>
-      <input ng-change="save('googleApiToken', connections.googleApiToken)" placeholder="Enter Token" ng-model="connections.googleApiToken" type="text" class="form-control">
+      <input ng-change="save('googleApiKey', connections.googleApiKey)" placeholder="Enter Key" ng-model="connections.googleApiKey" type="text" class="form-control">
       <div class="input-group-append">
-        <button ng-click="open('https://developers.google.com/maps/documentation/javascript/get-api-key')" class="btn btn-outline-dark">Get An API Token</button>
+        <button ng-click="open('https://console.cloud.google.com/apis/credentials')" class="btn btn-outline-dark">Get An API Key</button>
       </div>
     </div>
 
@@ -45,7 +45,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">Trello API Key</span>
       </div>
-      <input ng-change="save('trelloApiKey', connections.trelloApi); updateListId();" placeholder="Enter API Key" ng-model="connections.trelloApiKey" type="text" class="form-control">
+      <input ng-change="save('trelloApiKey', connections.trelloApiKey); updateListId();" placeholder="Enter API Key" ng-model="connections.trelloApiKey" type="text" class="form-control">
       <div class="input-group-append">
         <button ng-click="open('https://trello.com/app-key')" class="btn btn-outline-dark">Find Your API Key</button>
       </div>

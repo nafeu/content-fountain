@@ -1,3 +1,8 @@
+<style type="text/css">
+  #tag-selection-area {
+    min-height: 300px;
+  }
+</style>
 <div class="input-group mb-4">
   <a href="#!/connect" class="btn btn-sm btn-outline-dark mr-2">Connect</a>
   <a href="#!/generate" class="btn btn-sm btn-dark mr-2">Generate</a>
@@ -35,23 +40,41 @@
     </div>
     <h5 class="card-title">Decide on your topic</h5>
     <div class="input-group mb-3">
-      <input placeholder="What is your idea about?" ng-enter="insertIdea()" ng-model="relation" type="text" class="form-control">
+      <input ng-change="save('topic', topic)" placeholder="What is your idea about?" ng-enter="insertIdea()" ng-model="topic" type="text" class="form-control">
       <div class="input-group-append">
         <button type="button" ng-click="insertIdea()" class="btn btn-outline-dark">Insert Idea</button>
       </div>
     </div>
     <h5 class="card-title">Choose Your Root Tags</h5>
-    <div class="input-group mb-2">
-      <button
-        ng-repeat="collection in tagData"
-        ng-click="toggleTopic(collection.rootTag)"
-        ng-class="{
-          'btn-dark': selectedRoots.indexOf(collection.rootTag) > -1,
-          'btn-outline-dark': selectedRoots.indexOf(collection.rootTag) < 0
-        }"
-        class="btn mr-2 mb-2">
-        #{{collection.rootTag}}
-      </button>
+    <div id="tag-selection-area" class="row">
+      <div class="col-md-3">
+        <div class="btn-group-vertical">
+          <button
+            ng-repeat="category in availableCategories"
+            ng-click="toggleCategory(category)"
+            ng-class="{
+              'btn-dark': selectedCategory == category,
+              'btn-outline-dark': selectedCategory != category
+            }"
+            class="btn btn-sm">
+            {{category}}
+          </button>
+        </div>
+      </div>
+      <div class="col-md-9">
+        <div class="input-group mb-2">
+          <button
+            ng-repeat="collection in tagData | filter:categoryFilter"
+            ng-click="toggleRootTag(collection.rootTag)"
+            ng-class="{
+              'btn-dark': selectedRoots.indexOf(collection.rootTag) > -1,
+              'btn-outline-dark': selectedRoots.indexOf(collection.rootTag) < 0
+            }"
+            class="btn mr-2 mb-2">
+            #{{collection.rootTag}}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -59,8 +82,8 @@
     <div class="card mb-2">
       <div class="card-body">
         <h5 class="card-title">Finalized Content</h5>
-        <textarea placeholder="Enter idea" id="idea-output" class="form-control mb-2" rows="2" ng-model="idea"></textarea>
-        <textarea placeholder="Enter caption (optional)" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
+        <textarea ng-change="save('idea', idea)" placeholder="Enter idea" id="idea-output" class="form-control mb-2" rows="2" ng-model="idea"></textarea>
+        <textarea ng-change="save('caption', caption)" placeholder="Enter caption (optional)" id="caption-output" class="form-control mb-2" rows="2" ng-model="caption"></textarea>
         <p ng-show="tags.length > 0" class="card-text">{{tags}}</p>
         <h5 class="card-title">Tags</h5>
         <p ng-show="tags.length == 0" class="card-text">Select a topic...</p>
