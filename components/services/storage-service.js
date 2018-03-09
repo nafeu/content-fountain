@@ -2,11 +2,15 @@
 
 app.service('storageService', ['STORAGE_ID', function(storageId) {
   var storageKey = storageId + '-appData';
-  this.get = function(key) {
+  this.get = function(key, defaultOutput) {
     if (window.localStorage.getItem(storageKey)) {
-      return JSON.parse(window.localStorage.getItem(storageKey))[key];
+      var retrievedItem = JSON.parse(window.localStorage.getItem(storageKey))[key]
+      if (retrievedItem) {
+        return retrievedItem;
+      }
+      return defaultOutput;
     }
-    return null;
+    return defaultOutput;
   }
   this.set = function(key, value) {
     var appData = JSON.parse(window.localStorage.getItem(storageKey));
@@ -16,9 +20,20 @@ app.service('storageService', ['STORAGE_ID', function(storageId) {
     appData[key] = value;
     window.localStorage.setItem(storageKey, JSON.stringify(appData));
   }
-  this.export = function() {
+  this.export = function(exclusive) {
     if (window.localStorage.getItem(storageKey)) {
-      return window.btoa(window.localStorage.getItem(storageKey));
+      if (exclusive) {
+        var rawStorage = JSON.parse(window.localStorage.getItem(storageKey));
+        var out = {};
+        Object.keys(rawStorage).forEach(function(key){
+          if (exclusive.indexOf(key) > -1) {
+            out[key] = rawStorage[key];
+          }
+        });
+        return window.btoa(JSON.stringify(out));
+      } else {
+        return window.btoa(window.localStorage.getItem(storageKey));
+      }
     }
   }
   this.load = function(dataString, callback) {

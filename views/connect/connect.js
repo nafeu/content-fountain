@@ -17,7 +17,15 @@ angular.module('myApp.connect', ['ngRoute'])
   $scope.copyConnections = function() {
     var textarea = $window.document.createElement('textarea');
     textarea.setAttribute('style', 'opacity: 0');
-    textarea.textContent = storageService.export();
+    textarea.textContent = storageService.export([
+      "googleApiKey",
+      "sheetUrl",
+      "sheetId",
+      "trelloApiKey",
+      "trelloOauthToken",
+      "boardUrl",
+      "listId"
+    ]);
     $window.document.body.appendChild(textarea);
     textarea.select();
     $window.document.execCommand('copy');
@@ -26,7 +34,7 @@ angular.module('myApp.connect', ['ngRoute'])
   }
 
   $scope.connections = {
-    googleApiToken: storageService.get('googleApiToken'),
+    googleApiKey: storageService.get('googleApiKey'),
     trelloApiKey: storageService.get('trelloApiKey'),
     trelloOauthToken: storageService.get('trelloOauthToken'),
     sheetUrl: storageService.get('sheetUrl'),

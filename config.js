@@ -1,3 +1,3 @@
 'use strict';
 
-app.constant('STORAGE_ID', 'ang-gql-prototype')
+app.constant('STORAGE_ID', 'content-fountain')
