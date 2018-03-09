@@ -91,15 +91,15 @@
         <button type="button" ng-click="updateCopyMessage('copyTagsStatus')" class="btn btn-outline-dark mr-2 mb-2" data-clipboard-target="#tag-output">{{copyTagsStatus}}</button>
         <button ng-click="saveToTrello()" type="button" class="btn btn-outline-dark mr-2 mb-2">{{trelloSaveStatus}}</button>
         <button ng-click="clearIdea()" type="button" class="btn btn-outline-dark mr-2 mb-2">Clear</button>
-        <table ng-show="contentQueue.length > 0" class="table mt-2">
+        <table ng-show="newAdditions.length > 0" class="table mt-2">
           <thead>
             <tr>
-              <th scope="col">In Queue</th>
+              <th scope="col">New Additions</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="item in contentQueue">
-              <td>{{item.name}}</td>
+            <tr ng-repeat="item in newAdditions">
+              <td><a arget="_blank" href="{{item.url}}">{{item.name}}</a></td>
             </tr>
           </tbody>
         </table>

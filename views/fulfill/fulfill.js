@@ -22,18 +22,36 @@ angular.module('myApp.fulfill', ['ngRoute'])
     listId: storageService.get('listId')
   }
 
-  apiService.getCardsFromList(authorizeTrelloRequest({
-    "idList": $scope.connections.listId
-  }))
-    .then(function(res){
-      console.log(res.data);
-      $scope.contentQueue = [];
-      res.data.forEach(function(item){
-        $scope.contentQueue.push({
-          "name": item.name,
-          "url": item.url
+  $scope.loadCards = function() {
+    apiService.getCardsFromList($scope.authorizeTrelloRequest({
+      "idList": $scope.connections.listId
+    }))
+      .then(function(res){
+        $scope.contentQueue = [];
+        res.data.forEach(function(item){
+          var decodedData = JSON.parse(item.desc);
+          var queuedContent = {
+            "name": item.name,
+            "url": item.url
+          }
+          if (decodedData.caption) {
+            queuedContent.caption = decodedData.caption;
+          }
+          if (decodedData.tags) {
+            queuedContent.tags = decodedData.tags;
+          }
+          $scope.contentQueue.push(queuedContent)
         })
       })
-    })
+  }
+
+  $scope.authorizeTrelloRequest = function(obj) {
+    return Object.assign({
+      "key": $scope.connections.trelloApiKey,
+      "token": $scope.connections.trelloOauthToken
+    }, obj)
+  }
+
+  $scope.loadCards();
 
 }]);
