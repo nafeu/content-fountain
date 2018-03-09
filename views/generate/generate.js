@@ -193,6 +193,7 @@ angular.module('myApp.generate', ['ngRoute'])
     $scope.selectedFocalpoint = "";
     $scope.selectedMediaType = "";
     $scope.topic = "";
+    $scope.idea = "";
     $scope.saveContentState();
   }
 
