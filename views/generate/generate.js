@@ -24,7 +24,7 @@ angular.module('myApp.generate', ['ngRoute'])
 
   var MAX_TAGS = 30;
 
-  $scope.caption = storageService.get('caption');
+  $scope.caption = storageService.get('caption', '');
   $scope.tags = storageService.get('tags');
   $scope.selectedFocalpoint = storageService.get('selectedFocalpoint');
   $scope.selectedMediaType = storageService.get('selectedMediatype');
@@ -140,7 +140,7 @@ angular.module('myApp.generate', ['ngRoute'])
   }
 
   $scope.updateListId = function() {
-    apiService.getBoardLists(authorizeTrelloRequest({
+    apiService.getBoardLists($scope.authorizeTrelloRequest({
       "boardUrl": $scope.connections.boardUrl,
     }))
       .then(function(res, err){
@@ -155,18 +155,26 @@ angular.module('myApp.generate', ['ngRoute'])
 
   $scope.createCard = function() {
     $scope.trelloSaveStatus = "Saving...";
-    apiService.createCard(authorizeTrelloRequest({
+    var encodedCaption = "";
+    if ($scope.caption.length > 0) {
+      encodedCaption = $scope.caption;
+    }
+    apiService.createCard($scope.authorizeTrelloRequest({
       "idList": $scope.connections.listId,
       "name": $scope.idea,
+      "desc": JSON.stringify({
+        caption: encodedCaption,
+        tags: $scope.getFormattedTags()
+      }),
       "pos": "top"
     }))
       .then(function(cardResponse){
-        apiService.addCommentToCard(authorizeTrelloRequest({
+        apiService.addCommentToCard($scope.authorizeTrelloRequest({
           "idCard": cardResponse.data.id,
-          "text": getFormattedTags()
+          "text": $scope.getFormattedTags()
         }));
         if ($scope.caption.length > 0) {
-          apiService.addCommentToCard(authorizeTrelloRequest({
+          apiService.addCommentToCard($scope.authorizeTrelloRequest({
             "idCard": cardResponse.data.id,
             "text": $scope.caption
           }));
@@ -206,14 +214,14 @@ angular.module('myApp.generate', ['ngRoute'])
     $scope.save('topic', $scope.topic);
   }
 
-  function authorizeTrelloRequest(obj) {
+  $scope.authorizeTrelloRequest = function(obj) {
     return Object.assign({
       "key": $scope.connections.trelloApiKey,
       "token": $scope.connections.trelloOauthToken
     }, obj)
   }
 
-  function getFormattedTags() {
+  $scope.getFormattedTags = function() {
     return "•\x0A•\x0A•\x0A•\x0A•\x0A" + $scope.tags;
   }
 
