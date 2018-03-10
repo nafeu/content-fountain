@@ -9,7 +9,14 @@ angular.module('myApp.fulfill', ['ngRoute'])
   });
 }])
 
-.controller('FulfillCtrl', ['$scope', 'apiService', 'storageService', function($scope, apiService, storageService) {
+.controller('FulfillCtrl', ['$scope',
+                            '$window',
+                            'apiService',
+                            'storageService',
+                            function($scope,
+                                     $window,
+                                     apiService,
+                                     storageService) {
 
   $scope.queuedIdeas = [];
   $scope.finalizedIdeas = [];
@@ -162,6 +169,17 @@ angular.module('myApp.fulfill', ['ngRoute'])
         })
         $scope.loadCards();
       })
+  }
+
+  $scope.copyToClipboard = function(text) {
+    var textarea = $window.document.createElement('textarea');
+    textarea.setAttribute('style', 'opacity: 0');
+    textarea.textContent = text;
+    $window.document.body.appendChild(textarea);
+    textarea.select();
+    $window.document.execCommand('copy');
+    textarea.remove();
+    alert("Copied the following to clipboard:\n" + text);
   }
 
   $scope.loadData()

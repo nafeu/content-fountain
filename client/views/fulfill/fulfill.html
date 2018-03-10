@@ -11,8 +11,8 @@
     <div class="row">
       <div class="col">
         <button ng-click="complete(idea)" class="btn btn-outline-success mb-2 mr-2">Complete</button>
-        <button ng-click="copyCaption(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
-        <button ng-click="copyTags(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
+        <button ng-show="idea.caption.length > 0" ng-click="copyToClipboard(idea.caption)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
+        <button ng-click="copyToClipboard(idea.tags)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
         <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
         <a target="_blank" href="{{idea.url}}" class="h5">{{idea.name}}</a>
       </div>
@@ -25,8 +25,8 @@
     <div class="row">
       <div class="col">
         <button ng-click="finalize(idea)" class="btn btn-outline-success mb-2 mr-2">Finalize</button>
-        <button ng-click="copyCaption(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
-        <button ng-click="copyTags(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
+        <button ng-show="idea.caption.length > 0" ng-click="copyToClipboard(idea.caption)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
+        <button ng-click="copyToClipboard(idea.tags)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
         <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
         <a target="_blank" href="{{idea.url}}" class="h5">{{idea.name}}</a>
       </div>
