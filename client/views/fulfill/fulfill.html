@@ -5,17 +5,30 @@
   <a href="#!/engage" class="btn btn-sm btn-outline-dark mr-2">Engage</a>
 </div>
 
-<ul class="list-group">
-  <li ng-repeat="item in contentQueue" class="list-group-item">
+<h4 class="mb-2">Finalized</h4>
+<ul class="list-group mb-2">
+  <li ng-repeat="idea in finalizedIdeas" class="list-group-item">
     <div class="row">
       <div class="col">
-        <a target="_blank" href="{{item.url}}" class="h3">{{item.name}}</a>
+        <button ng-click="complete(idea)" class="btn btn-outline-success mb-2 mr-2">Complete</button>
+        <button ng-click="copyCaption(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
+        <button ng-click="copyTags(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
+        <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
+        <a target="_blank" href="{{idea.url}}" class="h5">{{idea.name}}</a>
       </div>
-      <div class="col text-right">
-        <button class="btn btn-outline-success mb-2 mr-2">Complete</button>
-        <button class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
-        <button class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
-        <button class="btn btn-outline-danger mb-2 mr-2">Remove</button>
+    </div>
+  </li>
+</ul>
+<h4 class="mb-2">Queued</h4>
+<ul class="list-group">
+  <li ng-repeat="idea in queuedIdeas" class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <button ng-click="finalize(idea)" class="btn btn-outline-success mb-2 mr-2">Finalize</button>
+        <button ng-click="copyCaption(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
+        <button ng-click="copyTags(idea)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
+        <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
+        <a target="_blank" href="{{idea.url}}" class="h5">{{idea.name}}</a>
       </div>
     </div>
   </li>

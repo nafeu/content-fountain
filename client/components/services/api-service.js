@@ -38,4 +38,19 @@ app.service('apiService', function($http) {
     var requestUrl = trelloApi + req.idCard + action;
     return $http.post(requestUrl, req);
   }
+
+  this.moveCard = function(req) {
+    var trelloApi = "https://api.trello.com/1/cards/";
+    var action = "/idList"
+    var requestUrl = trelloApi + req.idCard + action;
+    return $http.put(requestUrl, req);
+  }
+
+  this.deleteCard = function(req) {
+    var trelloApi = "https://api.trello.com/1/cards/";
+    var id = req.idCard;
+    var auth = "?key=" + req.key + "&token=" + req.token;
+    var requestUrl = trelloApi + id + auth;
+    return $http.delete(requestUrl);
+  }
 });

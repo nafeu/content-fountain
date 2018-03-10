@@ -10,17 +10,19 @@ angular.module('myApp.generate', ['ngRoute'])
 }])
 
 .controller('GenerateCtrl', ['$scope',
-                         '$window',
-                         '$timeout',
-                         'apiService',
-                         'modalService',
-                         'storageService',
-                         function($scope,
-                                  $window,
-                                  $timeout,
-                                  apiService,
-                                  modalService,
-                                  storageService) {
+                             '$window',
+                             '$timeout',
+                             '$location',
+                             'apiService',
+                             'modalService',
+                             'storageService',
+                             function($scope,
+                                      $window,
+                                      $timeout,
+                                      $location,
+                                      apiService,
+                                      modalService,
+                                      storageService) {
 
   new ClipboardJS('.btn');
 
@@ -36,7 +38,7 @@ angular.module('myApp.generate', ['ngRoute'])
 
   $scope.tagData = [];
   $scope.showConnections = false;
-  $scope.listName = "instagram";
+  $scope.listName = "ideas";
   $scope.trelloSaveStatus = "Save to Trello";
   $scope.tagLoadStatus = "Refresh Data";
   $scope.showImport = false;
@@ -50,6 +52,19 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
   $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
 
+  $scope.connections = {
+    googleApiKey: storageService.get('googleApiKey'),
+    trelloApiKey: storageService.get('trelloApiKey'),
+    trelloOauthToken: storageService.get('trelloOauthToken'),
+    sheetUrl: storageService.get('sheetUrl'),
+    boardUrl: storageService.get('boardUrl'),
+    listId: storageService.get('listId')
+  }
+
+  if (!$scope.connections.googleApiKey) {
+    $location.path("connect");
+  }
+
   $scope.selectFocalpoint = function(selection) {
     $scope.selectedFocalpoint = selection;
     $scope.save('selectedFocalpoint', selection);
@@ -58,15 +73,6 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.selectMediaType = function(selection) {
     $scope.selectedMediaType = selection;
     $scope.save('selectedMediaType', selection);
-  }
-
-  $scope.connections = {
-    googleApiKey: storageService.get('googleApiKey'),
-    trelloApiKey: storageService.get('trelloApiKey'),
-    trelloOauthToken: storageService.get('trelloOauthToken'),
-    sheetUrl: storageService.get('sheetUrl'),
-    boardUrl: storageService.get('boardUrl'),
-    listId: storageService.get('listId')
   }
 
   $scope.open = function(url) {
@@ -169,7 +175,7 @@ angular.module('myApp.generate', ['ngRoute'])
         caption: encodedCaption,
         tags: $scope.getFormattedTags()
       }),
-      "pos": "top"
+      "pos": "bottom"
     }))
       .then(function(cardResponse){
         apiService.addCommentToCard($scope.authorizeTrelloRequest({
