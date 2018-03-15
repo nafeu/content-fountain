@@ -53,4 +53,13 @@ app.service('apiService', function($http) {
     var requestUrl = trelloApi + id + auth;
     return $http.delete(requestUrl);
   }
+
+  this.getLabels = function(req) {
+    var trelloApi = "https://api.trello.com/1/boards/";
+    var id = req.boardUrl.match("\/b\/(.*)\/")[1];
+    var action = "/labels?limit=10&fields=name";
+    var auth = "&key=" + req.key + "&token=" + req.token;
+    var requestUrl = trelloApi + id + action + auth;
+    return $http.get(requestUrl);
+  }
 });

@@ -35,6 +35,7 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.topic = storageService.get('topic');
   $scope.idea = storageService.get('idea');
   $scope.selectedRoots = storageService.get('selectedRoots', []);
+  $scope.labels = storageService.get('labels');
 
   $scope.tagData = [];
   $scope.showConnections = false;
@@ -49,8 +50,24 @@ angular.module('myApp.generate', ['ngRoute'])
   $scope.selectedCategory = "";
   $scope.newAdditions = [];
 
-  $scope.focalpoints = ["question", "insight", "vanity", "throwback", "shoutout", "demonstration", "artwork", "scenery"]
-  $scope.mediaTypes = ["photo", "story", "video", "selfie", "textpost"]
+  $scope.focalpoints = [
+    "question",
+    "insight",
+    "vanity",
+    "throwback",
+    "shoutout",
+    "demonstration",
+    "artwork",
+    "scenery"
+  ];
+
+  $scope.mediaTypes = [
+    "photo",
+    "story",
+    "video",
+    "selfie",
+    "textpost"
+  ];
 
   $scope.connections = {
     googleApiKey: storageService.get('googleApiKey'),
@@ -175,6 +192,7 @@ angular.module('myApp.generate', ['ngRoute'])
         caption: encodedCaption,
         tags: $scope.getFormattedTags()
       }),
+      "idLabels": $scope.getLabels(),
       "pos": "bottom"
     }))
       .then(function(cardResponse){
@@ -298,7 +316,36 @@ angular.module('myApp.generate', ['ngRoute'])
       ).then(function(result){});
   }
 
+  $scope.loadLabels = function() {
+    apiService.getLabels($scope.authorizeTrelloRequest({
+      boardUrl: $scope.connections.boardUrl
+    }))
+      .then(function(res){
+        var labelObj = {}
+        res.data.forEach(function(label){
+          labelObj[label.name] = label.id
+        });
+        $scope.labels = labelObj
+        storageService.set('labels', labelObj);
+      })
+  }
+
+  $scope.getLabels = function() {
+    var out = "";
+    if ($scope.labels.instagram) {
+      out += $scope.labels.instagram + ",";
+    }
+    if ($scope.labels.content) {
+      out += $scope.labels.content;
+    }
+    return out;
+  }
+
   $scope.loadTagData();
   $scope.updateListId();
+
+  if (!$scope.labels) {
+    $scope.loadLabels();
+  }
 
 }]);
