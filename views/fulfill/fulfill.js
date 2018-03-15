@@ -18,6 +18,8 @@ angular.module('myApp.fulfill', ['ngRoute'])
                                      apiService,
                                      storageService) {
 
+  new ClipboardJS('.btn');
+
   $scope.queuedIdeas = [];
   $scope.finalizedIdeas = [];
 

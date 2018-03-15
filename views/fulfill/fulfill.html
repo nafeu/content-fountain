@@ -6,30 +6,67 @@
 </div>
 
 <h4 class="mb-2">Finalized</h4>
-<ul class="list-group mb-2">
-  <li ng-repeat="idea in finalizedIdeas" class="list-group-item">
-    <div class="row">
-      <div class="col">
-        <button ng-click="complete(idea)" class="btn btn-outline-success mb-2 mr-2">Complete</button>
-        <button ng-show="idea.caption.length > 0" ng-click="copyToClipboard(idea.caption)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
-        <button ng-click="copyToClipboard(idea.tags)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
-        <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
-        <a target="_blank" href="{{idea.url}}" class="h5">{{idea.name}}</a>
+
+<div ng-repeat="idea in finalizedIdeas">
+  <hr>
+  <div class="row mb-2">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+      <div class="card mb-2">
+        <div class="card-body">
+          <a target="_blank" href="{{idea.url}}">{{idea.name}}</a>
+        </div>
       </div>
     </div>
-  </li>
-</ul>
+    <div ng-show="idea.caption.length > 0" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+      <div class="input-group mb-2">
+        <input class="form-control" value="{{idea.caption}}" type=text id="copy-final-caption-{{$index}}"/>
+        <div class="input-group-append">
+          <button class="btn btn-outline-dark" data-clipboard-target="#copy-final-caption-{{$index}}">Copy Caption</button>
+        </div>
+      </div>
+      <div class="input-group mb-2">
+        <textarea rows=1 class="form-control" id="copy-tags-{{$index}}">{{idea.tags}}</textarea>
+        <div class="input-group-append">
+          <button class="btn btn-outline-dark" data-clipboard-target="#copy-final-tags-{{$index}}">Copy Tags</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+      <button ng-click="complete(idea)" class="btn btn-outline-success mb-2 mr-2">Complete</button>
+      <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
+    </div>
+  </div>
+</div>
+
 <h4 class="mb-2">Queued</h4>
-<ul class="list-group">
-  <li ng-repeat="idea in queuedIdeas" class="list-group-item">
-    <div class="row">
-      <div class="col">
-        <button ng-click="finalize(idea)" class="btn btn-outline-success mb-2 mr-2">Finalize</button>
-        <button ng-show="idea.caption.length > 0" ng-click="copyToClipboard(idea.caption)" class="btn btn-outline-dark mb-2 mr-2">Copy Caption</button>
-        <button ng-click="copyToClipboard(idea.tags)" class="btn btn-outline-dark mb-2 mr-2">Copy Tags</button>
-        <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
-        <a target="_blank" href="{{idea.url}}" class="h5">{{idea.name}}</a>
+
+<div ng-repeat="idea in queuedIdeas">
+  <hr>
+  <div class="row mb-2">
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+      <div class="card mb-2">
+        <div class="card-body">
+          <a target="_blank" href="{{idea.url}}">{{idea.name}}</a>
+        </div>
       </div>
     </div>
-  </li>
-</ul>
+    <div ng-show="idea.caption.length > 0" class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+      <div class="input-group mb-2">
+        <input class="form-control" value="{{idea.caption}}" type=text id="copy-queued-caption-{{$index}}"/>
+        <div class="input-group-append">
+          <button class="btn btn-outline-dark" data-clipboard-target="#copy-queued-caption-{{$index}}">Copy Caption</button>
+        </div>
+      </div>
+      <div class="input-group mb-2">
+        <textarea rows=1 class="form-control" id="copy-queued-tags-{{$index}}">{{idea.tags}}</textarea>
+        <div class="input-group-append">
+          <button class="btn btn-outline-dark" data-clipboard-target="#copy-queued-tags-{{$index}}">Copy Tags</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+      <button ng-click="finalize(idea)" class="btn btn-outline-success mb-2 mr-2">Finalize</button>
+      <button ng-click="remove(idea)" class="btn btn-outline-danger mb-2 mr-2">Remove</button>
+    </div>
+  </div>
+</div>
